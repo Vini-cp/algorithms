@@ -41,9 +41,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     // remove and return a random item
     public Item dequeue() {
         removeCheck();
-        // int element = StdRandom.uniform(size);
-        int element = 0;
-        StdOut.println(element);
+        int element = StdRandom.uniform(size);
         if (element == 0)
             return removeFirst();
         else if (element == (size - 1))
@@ -58,8 +56,10 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         Node node = first;
         Item item;
         int element = StdRandom.uniform(size);
-        while (element-- > 0)
+        while (element > 0) {
             first = first.next;
+            element--;
+        }
         item = first.item;
         first = node;
         return item;
@@ -90,12 +90,13 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     private Item removeLast() {
         Node node = first;
         Item item;
-        int i = 0;
-        while (++i < size - 1)
-            first = first.next;
-        item = first.next.item;
-        first.next = null;
-        first = node;
+        int i = 1;
+        while (i < size - 1) {
+            node = node.next;
+            i++;
+        }
+        item = node.next.item;
+        node.next = null;
         size--;
         return item;
     }
@@ -103,12 +104,13 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     private Item removeMiddle(int element) {
         Node node = first;
         Item item;
-        int i = 0;
-        while (++i <= element - 1)
-            first = first.next;
-        item = first.next.item;
-        first.next = first.next.next;
-        first = node;
+        int i = 1;
+        while (i <= element - 1) {
+            node = node.next;
+            i++;
+        }
+        item = node.next.item;
+        node.next = node.next.next;
         size--;
         return item;
     }
@@ -136,78 +138,131 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     // unit testing (required)
     public static void main(String[] args) {
         RandomizedQueue<String> str = new RandomizedQueue<String>();
-        StdOut.println(str.isEmpty());
-        // str.removeFirst();
+        StdOut.println("Test isEmpty function");
+        StdOut.println("Expected: true");
+        StdOut.println("Received: " + str.isEmpty());
+        StdOut.println();
+
+        StdOut.println("Add two members to the queue 0 & 1");
         str.enqueue("Test0");
         str.enqueue("Test1");
-        StdOut.println(str.size());
+        StdOut.println();
+
+        StdOut.println("Test size function");
+        StdOut.println("Expected: 2");
+        StdOut.println("Received: " + str.size());
+        StdOut.println();
+
+        StdOut.println("Add two members to the queue 2 & 3");
         str.enqueue("Test2");
         str.enqueue("Test3");
-        // str.addLast(null);
-
-        StdOut.println(str.isEmpty());
-        StdOut.println(str.size());
-
         StdOut.println();
+
+        StdOut.println("Test isEmpty function");
+        StdOut.println("Expected: false");
+        StdOut.println("Received: " + str.isEmpty());
+        StdOut.println();
+
+        StdOut.println("Test size function");
+        StdOut.println("Expected: 4");
+        StdOut.println("Received: " + str.size());
+        StdOut.println();
+
+        String expItems = "Test3 Test2 Test1 Test0";
+        StdOut.println("Test iterator hasNext and next functions");
+        StdOut.println("Expected: " + expItems);
+        StdOut.print("Received: ");
         Iterator<String> it = str.iterator();
         while (it.hasNext()) {
-            StdOut.println(it.next());
+            StdOut.print(it.next() + " ");
         }
-
+        StdOut.println();
         StdOut.println();
 
+        StdOut.println("Test sample function: return a random item, but do not remove it");
+        StdOut.print(str.sample() + " ");
+        StdOut.print(str.sample() + " ");
+        StdOut.print(str.sample() + " ");
+        StdOut.print(str.sample() + " ");
+        StdOut.print(str.sample() + " ");
         StdOut.println(str.sample());
-        StdOut.println(str.sample());
-        StdOut.println(str.sample());
-        StdOut.println(str.sample());
-        StdOut.println(str.sample());
-        StdOut.println(str.sample());
-        StdOut.println(str.size());
-
         StdOut.println();
 
+        StdOut.println("Test size function");
+        StdOut.println("Expected: 4");
+        StdOut.println("Received: " + str.size());
+        StdOut.println();
+
+        StdOut.println("Test if all items are in the list yet");
+        StdOut.println("Expected: " + expItems);
+        StdOut.print("Received: ");
         Iterator<String> it1 = str.iterator();
         while (it1.hasNext()) {
-            StdOut.println(it1.next());
+            StdOut.print(it1.next() + " ");
         }
-
+        StdOut.println();
         StdOut.println();
 
+        StdOut.println("Test dequeue function: return a random item, and remove it");
+        StdOut.println("2 Items removed:");
         StdOut.println(str.dequeue());
-        // StdOut.println(str.dequeue());
-
+        StdOut.println(str.dequeue());
         StdOut.println();
 
+        StdOut.println("Test if all items that should be in the list are there yet");
+        StdOut.println("Expected: " + expItems + " - items excluded above");
+        StdOut.print("Received: ");
         Iterator<String> it2 = str.iterator();
         while (it2.hasNext()) {
-            StdOut.println(it2.next());
+            StdOut.print(it2.next() + " ");
         }
+        StdOut.println();
+        StdOut.println();
 
-        // StdOut.println(str.size());
-        // StdOut.println();
-        //
-        // StdOut.println(str.dequeue());
-        //
-        // StdOut.println();
+        StdOut.println("Test size function");
+        StdOut.println("Expected: 2");
+        StdOut.println("Received: " + str.size());
+        StdOut.println();
 
+        StdOut.println("Test dequeue function: return a random item, and remove it");
+        StdOut.println("1 Item removed:");
+        StdOut.println(str.dequeue());
+        StdOut.println();
+
+        StdOut.println("Test if all items that should be in the list are there yet");
+        StdOut.println("Expected: " + expItems + " - items excluded above");
+        StdOut.print("Received: ");
         Iterator<String> it3 = str.iterator();
         while (it3.hasNext()) {
-            StdOut.println(it3.next());
+            StdOut.print(it3.next() + " ");
         }
+        StdOut.println();
+        StdOut.println();
 
-        StdOut.println(str.size());
+        StdOut.println("Test size function");
+        StdOut.println("Expected: 1");
+        StdOut.println("Received: " + str.size());
+        StdOut.println();
 
+        StdOut.println("Test dequeue function: return a random item, and remove it");
+        StdOut.println("1 Item removed:");
+        StdOut.println(str.dequeue());
+        StdOut.println();
 
-        // StdOut.println();
-        // StdOut.println(str.removeFirst());
-        // StdOut.println(str.size());
-        // StdOut.println(str.removeLast());
-        // StdOut.println(str.size());
-        // StdOut.println();
-        //
-        // it = str.iterator();
-        // while (it.hasNext()) {
-        //     StdOut.println(it.next());
-        // }
+        StdOut.println("Test if all items that should be in the list are there yet");
+        StdOut.println("Expected: ");
+        StdOut.print("Received: ");
+        Iterator<String> it4 = str.iterator();
+        while (it4.hasNext()) {
+            StdOut.print(it4.next() + " ");
+        }
+        StdOut.println();
+        StdOut.println();
+
+        StdOut.println("Test size function");
+        StdOut.println("Expected: 0");
+        StdOut.println("Received: " + str.size());
+        StdOut.println();
+
     }
 }
