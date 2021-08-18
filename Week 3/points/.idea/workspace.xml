@@ -75,12 +75,22 @@
     <property name="ToolWindowMessages.ShowToolbar" value="false" />
     <property name="ToolWindowRun.ShowToolbar" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="settings.saveactions" />
   </component>
-  <component name="RunManager" selected="Application.RandomizedQueue">
-    <configuration name="Deque" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="Deque" />
+  <component name="RunManager" selected="Application.BruteCollinearPoints">
+    <configuration name="BruteCollinearPoints" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="BruteCollinearPoints" />
       <module name="Algorithms, Part I" />
+      <option name="PROGRAM_PARAMETERS" value="input8.txt" />
+      <method v="2" />
+    </configuration>
+    <configuration name="FastCollinearPoints" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="FastCollinearPoints" />
+      <module name="Algorithms, Part I" />
+      <option name="PROGRAM_PARAMETERS" value="input10.txt" />
       <method v="2" />
     </configuration>
     <configuration name="HelloGoodbye" type="Application" factoryName="Application">
@@ -89,8 +99,13 @@
       <option name="PROGRAM_PARAMETERS" value="Kevin Bob" />
       <method v="2" />
     </configuration>
-    <configuration name="RandomizedQueue" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="RandomizedQueue" />
+    <configuration name="Point" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="Point" />
+      <module name="Algorithms, Part I" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Test" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="Test" />
       <module name="Algorithms, Part I" />
       <method v="2" />
     </configuration>
