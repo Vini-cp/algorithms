@@ -2,15 +2,20 @@ import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 
+import java.util.Arrays;
+
 public class Board {
-    private int dimension;
+    private final int dimension;
     private int[][] board;
+    private int zeroXpos;
+    private int zeroYpos;
 
     // create a board from an n-by-n array of tiles,
     // where tiles[row][col] = tile at (row, col)
     public Board(int[][] tiles) {
         dimension = tiles.length;
         copyBoard(tiles);
+        findZero();
     }
 
     // string representation of this board
@@ -56,22 +61,37 @@ public class Board {
 
     // is this board the goal board?
     public boolean isGoal() {
-        return hamming() == 0;
+        return manhattan() == 0;
     }
 
     // does this board equal y?
     public boolean equals(Object y) {
-        if (y == null || this.getClass() != y.getClass())
+        // checking if the two objects
+        // point to same object
+        if (this == y)
+            return true;
+
+        // checking for two condition:
+        // 1) object is pointing to null
+        // 2) if the objects belong to
+        // same class or not
+        if (y == null
+                || this.getClass() != y.getClass())
             return false;
-        return (this == y);
+
+        Board toCompare = (Board) y; // type casting object to the
+        // intended class type
+
+        // checking if the two
+        // objects share all the same values
+        return Arrays.deepEquals(this.board, toCompare.board);
     }
 
     // all neighboring boards
     public Iterable<Board> neighbors() {
         Stack<Board> boards = new Stack<Board>();
-        int[] position = findZero();
-        int i = position[0];
-        int j = position[1];
+        int i = zeroYpos;
+        int j = zeroXpos;
         if (i > 0)
             boards.push(swap(i, j, i - 1, j));
         if (i < dimension - 1)
@@ -85,8 +105,8 @@ public class Board {
 
     // a board that is obtained by exchanging any pair of tiles
     public Board twin() {
-        int i = StdRandom.uniform(dimension);
-        int j = StdRandom.uniform(dimension);
+        int i = zeroYpos;
+        int j = zeroXpos;
 
         if (StdRandom.uniform(2) == 0) { // Change left and right
             if (j == 0)
@@ -114,16 +134,39 @@ public class Board {
         }
     }
 
-    private int[] findZero() {
-        int[] position = new int[2];
+    public boolean isSolvable() {
+        Board testSolvable;
+        // comparing lines
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension - 1; j++) {
+                if (board[i][j] == 0 || board[i][j + 1] == 0)
+                    continue;
+                testSolvable = swap(i, j, i, j + 1);
+                if (testSolvable.isGoal())
+                    return false;
+            }
+        }
+        // comparing columns
+        for (int i = 0; i < dimension - 1; i++) {
+            for (int j = 0; j < dimension; j++) {
+                if (board[i][j] == 0 || board[i + 1][j] == 0)
+                    continue;
+                testSolvable = swap(i, j, i + 1, j);
+                if (testSolvable.isGoal())
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    private void findZero() {
         for (int i = 0; i < dimension; i++)
             for (int j = 0; j < dimension; j++)
                 if (board[i][j] == 0) {
-                    position[0] = i;
-                    position[1] = j;
+                    zeroYpos = i;
+                    zeroXpos = j;
                     break;
                 }
-        return position;
     }
 
     private Board swap(int i, int j, int k, int m) {
@@ -147,6 +190,18 @@ public class Board {
                 { 8, 1, 3 },
                 { 4, 0, 2 },
                 { 7, 6, 5 }
+        };
+
+        int[][] newTiles = {
+                { 8, 1, 3 },
+                { 4, 0, 2 },
+                { 7, 5, 6 }
+        };
+
+        int[][] unsolvableBoard = {
+                { 1, 2, 3 },
+                { 4, 5, 6 },
+                { 8, 7, 0 }
         };
 
         Board board = new Board(tiles);
@@ -176,13 +231,27 @@ public class Board {
         StdOut.println("Received: " + board.isGoal());
         StdOut.println();
 
+        StdOut.println("Check isSolvable method: ");
+        StdOut.println("Expected: true");
+        StdOut.println("Received: " + board.isSolvable());
+        StdOut.println();
+
+        StdOut.println("Check isSolvable method with unsolvable board: ");
+        Board unsolvable = new Board(unsolvableBoard);
+        StdOut.println("Expected: false");
+        StdOut.println("Received: " + unsolvable.isSolvable());
+        StdOut.println();
+
         Board copyBoard = new Board(tiles);
         StdOut.println("Check equals method with another board and the same board: ");
-        StdOut.println("Expected: false");
+        StdOut.println("Board with the same tiles: ");
+        StdOut.println("Expected: true");
         StdOut.println("Received: " + board.equals(copyBoard));
 
-        StdOut.println("Expected: true");
-        StdOut.println("Received: " + board.equals(board));
+        Board newBoard = new Board(newTiles);
+        StdOut.println("Board with the different tiles: ");
+        StdOut.println("Expected: false");
+        StdOut.println("Received: " + board.equals(newBoard));
         StdOut.println();
 
         StdOut.println("Check twin method: ");
